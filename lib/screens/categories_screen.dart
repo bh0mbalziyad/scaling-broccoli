@@ -4,6 +4,7 @@ import '../dummy_data.dart';
 import '../widgets/category_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
+  static const routeName = '/';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,8 +15,9 @@ class CategoriesScreen extends StatelessWidget {
       ),
       body: GridView(
         padding: const EdgeInsets.all(15),
-        children: DUMMY_DATA
+        children: DUMMY_CATEGORIES
             .map((catData) => CategoryItem(
+                  catData.id,
                   catData.title,
                   catData.color,
                 ))

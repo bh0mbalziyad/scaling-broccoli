@@ -53,31 +53,34 @@ class MealDetailScreen extends StatelessWidget {
       ),
     );
 
-    return WillPopScope(
-      onWillPop: () {
-        print("Tried popping");
-        Navigator.pop(context);
-        return Future.value(true);
-      },
-      child: Scaffold(
-          appBar: AppBar(
-            title: Text('${selectedMeal.title}'),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                mealImage,
-                buildSectionTitle(context, 'Ingredients'),
-                buildContainer(
-                  child: listOfIngredients,
-                ),
-                buildSectionTitle(context, 'Steps'),
-                buildContainer(
-                  child: listOfSteps,
-                ),
-              ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('${selectedMeal.title}'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            mealImage,
+            buildSectionTitle(context, 'Ingredients'),
+            buildContainer(
+              child: listOfIngredients,
             ),
-          )),
+            buildSectionTitle(context, 'Steps'),
+            buildContainer(
+              child: listOfSteps,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.delete,
+        ),
+        onPressed: () {
+          if (Navigator.of(context).canPop()) Navigator.of(context).pop(id);
+          return;
+        },
+      ),
     );
   }
 

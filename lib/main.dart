@@ -6,6 +6,9 @@ import './screens/tabs_screen.dart';
 import './screens/meal_detail_screen.dart';
 import './screens/filters_screen.dart';
 
+import './models/meal.dart';
+import './dummy_data.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -14,12 +17,45 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Map<String, bool> filters = {
+  Map<String, bool> _filters = {
     'glutenFree': false,
     'lactose': false,
     'vegan': false,
     'vegetarian': false,
   };
+
+  List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _favoriteMeals = [];
+
+  void _applyFilter(Map<String, bool> filters) {
+    // TODO
+    setState(() {
+      this._filters = filters;
+      this._availableMeals = DUMMY_MEALS.where((meal) {
+        if (this._filters['glutenFree'] && !meal.isGlutenFree) return false;
+        if (this._filters['lactose'] && !meal.isLactoseFree) return false;
+        if (this._filters['vegan'] && !meal.isVegan) return false;
+        if (this._filters['vegetarian'] && !meal.isVegetarian) return false;
+        return true;
+      }).toList();
+    });
+  }
+
+  void _toggleFavorite(String id) {
+    final int mealIndex = _favoriteMeals.indexWhere((meal) => meal.id == id);
+
+    if (mealIndex == -1) {
+      // if meal is not in favorites
+      setState(() {
+        _favoriteMeals.add(DUMMY_MEALS.firstWhere((meal) => meal.id == id));
+      });
+    } else {
+      // if meal is in favorites
+      setState(() {
+        _favoriteMeals.removeAt(mealIndex);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +82,14 @@ class _MyAppState extends State<MyApp> {
       // home: CategoriesScreen(),
       initialRoute: '/', // default value
       routes: {
-        '/': (context) => TabsScreen(),
-        CategoryMealsScreen.routeName: (context) => CategoryMealsScreen(),
+        '/': (context) => TabsScreen(this._favoriteMeals),
+        CategoryMealsScreen.routeName: (context) =>
+            CategoryMealsScreen(this._availableMeals),
         MealDetailScreen.routeName: (context) => MealDetailScreen(),
-        FiltersScreen.routeName: (context) => FiltersScreen(),
+        FiltersScreen.routeName: (context) => FiltersScreen(
+              _applyFilter,
+              initFilters: this._filters,
+            ),
       },
       // onGenerateRoute: (settings) {
       //   return MaterialPageRoute(builder: (contenxt) => CategoriesScreen());

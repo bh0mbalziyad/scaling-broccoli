@@ -26,7 +26,6 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     if (!_loadedInitData) {
       final _routeArgs =
           ModalRoute.of(context).settings.arguments as Map<String, String>;
@@ -40,11 +39,11 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
     }
   }
 
-  void _removeItem(String mealId) {
-    setState(() {
-      _displayedMeals.removeWhere((element) => element.id == mealId);
-    });
-  }
+  // void _removeItem(String mealId) {
+  //   setState(() {
+  //     _displayedMeals.removeWhere((element) => element.id == mealId);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,7 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
             affordability: meal.affordability,
             complexity: meal.complexity,
             duration: meal.duration,
-            removeItem: _removeItem,
+            // removeItem: _removeItem,
           );
         },
         itemCount: _displayedMeals.length,
